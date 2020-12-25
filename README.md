@@ -1,11 +1,10 @@
 # Tic_Tac_Toe
 This was just a tic tac toe game I made while learning python.
 Future changes I want to do:
-  Put graphics in a seperate module to import to keep code clean.
-  Re-work draw_check, win_check and lose_check to be more efficent.
-  Re-work CPU turn to be more challenging.
-  Find Bug in CPU turn that results in index out of range error.
-  Maybe make different difficult settings.
+  • Re-work draw_check, win_check and lose_check to be more efficent.
+  • Re-work CPU turn to be more challenging.
+  • Find Bug in CPU turn that results in index out of range error.
+  • Maybe make different difficult settings.
 
 Original Game logic design:
 Tic Tac Toe game logic
