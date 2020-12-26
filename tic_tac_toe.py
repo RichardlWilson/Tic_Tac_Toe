@@ -4,6 +4,7 @@
 from os import system, name
 import time
 import random
+import graphics_mod
 
 ################################################################################
 #clear screen function
@@ -12,61 +13,8 @@ def clear():
         _=system('cls')
     else:
         _=system('clear')
+
 ################################################################################
-# Game Graphics
-
-# Game Tile Page with Instructions to play 
-def game_intro():
-    print('''
-             ######## ####  ######     ########    ###     ######     ########  #######  ########              
- ##   ##        ##     ##  ##    ##       ##      ## ##   ##    ##       ##    ##     ## ##           ##   ##  
-  ## ##         ##     ##  ##             ##     ##   ##  ##             ##    ##     ## ##            ## ##   
-#########       ##     ##  ##             ##    ##     ## ##             ##    ##     ## ######      ######### 
-  ## ##         ##     ##  ##             ##    ######### ##             ##    ##     ## ##            ## ##   
- ##   ##        ##     ##  ##    ##       ##    ##     ## ##    ##       ##    ##     ## ##           ##   ##  
-                ##    ####  ######        ##    ##     ##  ######        ##     #######  ########                     
-        \n    Welcome to Tic Tac Toe!\n
-        • The object of the game is to get three in a row.
-        • 'X' will always go first.
-        • Select a number on the grid to make your move.\n
-        ''')
-
-# Graphic to display if game is a Draw
-def tie():
-    print('''
-:::::::::  :::::::::      :::     :::       ::: 
-:+:    :+: :+:    :+:   :+: :+:   :+:       :+: 
-+:+    +:+ +:+    +:+  +:+   +:+  +:+       +:+ 
-+#+    +:+ +#++:++#:  +#++:++#++: +#+  +:+  +#+ 
-+#+    +#+ +#+    +#+ +#+     +#+ +#+ +#+#+ +#+ 
-#+#    #+# #+#    #+# #+#     #+#  #+#+# #+#+#  
-#########  ###    ### ###     ###   ###   ### 
-        ''')
-
-# Graphic to display CPU wins game
-def loser():
-    print('''
-:::   :::  ::::::::  :::    :::      :::        ::::::::   ::::::::  :::::::::: 
-:+:   :+: :+:    :+: :+:    :+:      :+:       :+:    :+: :+:    :+: :+:        
- +:+ +:+  +:+    +:+ +:+    +:+      +:+       +:+    +:+ +:+        +:+        
-  +#++:   +#+    +:+ +#+    +:+      +#+       +#+    +:+ +#++:++#++ +#++:++#   
-   +#+    +#+    +#+ +#+    +#+      +#+       +#+    +#+        +#+ +#+        
-   #+#    #+#    #+# #+#    #+#      #+#       #+#    #+# #+#    #+# #+#        
-   ###     ########   ########       ########## ########   ########  ########## 
-        ''')
-
-# Graphic to display Player wins game
-def winner():
-    print('''
-:::       ::: ::::::::::: ::::    ::: ::::    ::: :::::::::: :::::::::  
-:+:       :+:     :+:     :+:+:   :+: :+:+:   :+: :+:        :+:    :+: 
-+:+       +:+     +:+     :+:+:+  +:+ :+:+:+  +:+ +:+        +:+    +:+ 
-+#+  +:+  +#+     +#+     +#+ +:+ +#+ +#+ +:+ +#+ +#++:++#   +#++:++#:  
-+#+ +#+#+ +#+     +#+     +#+  +#+#+# +#+  +#+#+# +#+        +#+    +#+ 
- #+#+# #+#+#      #+#     #+#   #+#+# #+#   #+#+# #+#        #+#    #+# 
-  ###   ###   ########### ###    #### ###    #### ########## ###    ###
-        ''')
-
 # Graphic to display game board
 def display_grid():
     #clear()
@@ -190,76 +138,53 @@ def cpu_move(turn):
 
 ################################################################################
 #check if win , lose or draw
-def draw_check(draw):
+
+# eight different win combinations:
+def read_combos(update_combos):
+    combinations = [
+        choice[:3],
+        choice[3:6],
+        choice[6:9],
+        choice[0:9:3],
+        choice[1:9:3],
+        choice[2:9:3],
+        choice[0:9:4],
+        choice[2:7:2]
+        ]
+
+    return combinations
+
+def draw_check(draw, combinations):
     # check if Draw
     if len(used_choices)+1 > 8:
         draw = True
-        return draw
     else:
         draw = False
-        return draw    
+    
+    return draw    
         
-def win_check(win):
-    #Check if Win    
-    if choice[:3].count(player) == 3:
-        win = True
-        return win    
+def win_check(win, combinations):
+    #Check if Win  
+    for combo in combinations:
+        #print(f'combo : {combo}') / This line for debugging
+        if combo.count(player) == 3:
+            win = True
+            break
+        else:
+            win = False
 
-    elif choice[3:6].count(player) == 3:
-        win = True
-        return win
+    return win                 
 
-    elif choice[6:9].count(player) == 3:
-        win = True
-        return win 
-    elif choice[0:9:3].count(player) == 3:
-        win = True
-        return win
-    elif choice[1:9:3].count(player) == 3:
-        win = True
-        return win
-    elif choice[2:9:3].count(player) == 3:
-        win = True
-        return win            
-    elif choice[0:9:4].count(player) == 3:
-        win = True
-        return win 
-    elif choice[2:7:2].count(player) == 3:
-        win = True
-        return win 
-    else:
-        win = False
-        return win                  
-
-def lose_check(lose):
+def lose_check(lose, combinations):
     #check if Lose    
-    if choice[:3].count(cpu) == 3:
-        lose = True
-        return lose
-    elif choice[3:6].count(cpu) == 3:
-        lose = True
-        return lose
-    elif choice[6:9].count(cpu) == 3:
-        lose = True
-        return lose 
-    elif choice[0:9:3].count(cpu) == 3:
-        lose = True
-        return lose
-    elif choice[1:9:3].count(cpu) == 3:
-        lose = True
-        return lose
-    elif choice[2:9:3].count(cpu) == 3:
-        lose = True
-        return lose            
-    elif choice[0:9:4].count(cpu) == 3:
-        lose = True
-        return lose 
-    elif choice[2:7:2].count(cpu) == 3:
-        lose = True
-        return lose
-    else:
-        lose = False
-        return lose
+    for combo in combinations:
+        if combo.count(cpu) == 3:
+            lose = True
+            break 
+        else:
+            lose = False
+    
+    return lose
 
 ################################################################################
 #End of game
@@ -268,11 +193,11 @@ def end_status(win,draw,lose):
     print('end_status')
     print(win,draw,lose)
     if draw == True:
-        tie()
+        graphics_mod.tie()
     elif win == True:
-        winner()
+        graphics_mod.winner()
     elif lose == True:
-        loser()
+        graphics_mod.loser()
 
 # Asks Player if they want to play again or leave game
 def replay(game_on):
@@ -306,14 +231,14 @@ game_on = True
 draw = False
 win = False
 lose = False
-
+combinations = []
 # Run Game
 while game_on:
     # Clear screen
     clear()
 
     # Game Title Screen
-    game_intro()
+    graphics_mod.game_intro()
 
     # Player Select X or O
     player = player_selection(player)
@@ -331,9 +256,10 @@ while game_on:
         while turn == True:
             clear()
             display_grid()
-            win = win_check(win)
-            draw = draw_check(draw)
-            lose = lose_check(lose)
+            combinations = read_combos(combinations)
+            win = win_check(win,combinations)
+            draw = draw_check(draw,combinations)
+            lose = lose_check(lose,combinations)
 
             if win or draw or lose:
                 progress = False
@@ -348,9 +274,10 @@ while game_on:
             display_grid()
 
             # check status
-            win = win_check(win)
-            draw = draw_check(draw) 
-            lose = lose_check(lose)
+            combinations = read_combos(combinations)
+            win = win_check(win,combinations)
+            draw = draw_check(draw,combinations) 
+            lose = lose_check(lose, combinations)
 
             if win or draw or lose:
                 progress = False
@@ -366,7 +293,7 @@ while game_on:
     game_on = replay(game_on)
     if game_on == False:
         # Prints a meassage and leaves game
-        clear()
+        #clear()
         print('''Thank you for playing!!!!!!''')        
     else:
         # Resets initial game setup
