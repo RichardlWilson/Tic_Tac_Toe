@@ -7,7 +7,7 @@ import random
 import graphics_mod
 
 ################################################################################
-#clear screen function
+#Clear screen
 def clear():
     if name == 'nt':
         _=system('cls')
@@ -15,25 +15,11 @@ def clear():
         _=system('clear')
 
 ################################################################################
-# Graphic to display game board
-def display_grid():
-    #clear()
-    print(f'''
-        Tic Tac Toe\n
-        *******************\n
-        *  {choice[6]}  *  {choice[7]}  *  {choice[8]}  *\n
-        *******************\n
-        *  {choice[3]}  *  {choice[4]}  *  {choice[5]}  *\n
-        *******************\n
-        *  {choice[0]}  *  {choice[1]}  *  {choice[2]}  *\n
-        *******************\n
-        ''')    
-################################################################################
 # Player Selection, CPU Assignment, Starting Turn Assignment
 #The Player plays against the CPU
 
 # Player Selection
-def player_selection(player):
+def player_selection():
     valid_players = ['X', 'O']
     player = '*'
     while player not in valid_players: 
@@ -43,20 +29,15 @@ def player_selection(player):
         if player not in valid_players:
             clear()
             print('Sorry that is not a option!')
+        elif player == 'X':
+            cpu = 'O'
+        else:
+            cpu = 'X'    
 
-    return player
-
-# CPU Assignment
-def cpu_assignment(cpu):
-    if player == 'X':
-        cpu = 'O'
-    else:
-        cpu = 'X'
-    
-    return cpu
+    return (player, cpu)
 
 # Turn Assignment
-def turn_assignment(turn):
+def turn_assignment():
     if player == 'X':
         turn = True
     else:
@@ -67,71 +48,65 @@ def turn_assignment(turn):
 ################################################################################
 # Code for Player's and CPU's Turn
 
+# Turn Counter
+def turn_counter(counter):
+    counter += 1
+    return counter
+
 # Player Turn
-def players_move(turn):
+def players_move(turn, counter):
 
     while turn == True:
-        # Display the turn number
-        print('turn # ' + str(len(used_choices)+1))
+        print(f'turn # {counter}')
 
-        # Ask Player for board position to mark
         move = input('Enter a number (1-9) to place your move: ')
 
-        # Clear screen and display the updated board
         clear()
-        display_grid()
+        graphics_mod.display_grid(positions)
 
-        # Validate Players input is correct
         try:
             move = int(move)
         except:
             print('Sorry that is not (1-9)')
             continue
         
-        if move-1 in used_choices:        
+        if move in used_positions:        
             print('This place has already been used')
 
-        elif move-1 not in range(0,9):
+        elif move not in range(1,10):
             print('Sorry that is not (1-9)')    
 
-        # If Players input is valid, Player's input is the index position -1 
-        # of choice[index]. Then copies index number to used_choices[].
-        # Turn Ends 
         else:    
-            choice[move-1] = player
-            used_choices.append(move-1)
-
+            positions[str(move)] = player
+            used_positions.append(move)
             # Turn ends
             turn = False
 
     return turn 
 
 #CPU turn
-def cpu_move(turn):
+def cpu_move(turn, counter):
 
-    while turn != True:
-        # Display the turn number
-        print('turn # ' + str(len(used_choices)+1))
+    while turn == False:
+        print(f'turn # {counter}')
+
         print("CPU's turn, Please wait.")
         
-        # CPU Waits a random time intrival before making a move to give a more
-        # human like feel. 
         random_num = [num for num in range(0,9)]
         time.sleep(random.choice(random_num))
+        ###
 
-        # CPU selects a random value from choice_ref -1 and names it as index.
-        index = int(random.choice(choice_ref))-1
+        #need a stratagy here
 
-        # Checks if value index is already been used
-        while index in used_choices:
-            index = int(random.choice(choice_ref))
+        ###
+        index = int(random.choice(range(1,10)))
+        
+        while index in used_positions:
+            index = int(random.choice(range(1,10)))
 
-        # If index has not been used use index to select position in
-        # choice[index] to place a mark on the board
-        used_choices.append(index)
-        choice[index] = cpu
+        used_positions.append(index)
+        positions[str(index)] = cpu
 
-        # Turn ends
         turn = True
 
     return turn    
@@ -140,43 +115,44 @@ def cpu_move(turn):
 #check if win , lose or draw
 
 # eight different win combinations:
-def read_combos(update_combos):
+def read_combos():
+    position_values = list(positions.values())
+
     combinations = [
-        choice[:3],
-        choice[3:6],
-        choice[6:9],
-        choice[0:9:3],
-        choice[1:9:3],
-        choice[2:9:3],
-        choice[0:9:4],
-        choice[2:7:2]
+        position_values[:3],
+        position_values[3:6],
+        position_values[6:9],
+        position_values[0:9:3],
+        position_values[1:9:3],
+        position_values[2:9:3],
+        position_values[0:9:4],
+        position_values[2:7:2]
         ]
 
     return combinations
 
-def draw_check(draw, combinations):
-    # check if Draw
-    if len(used_choices)+1 > 8:
+# Draw Check
+def draw_check(draw, counter):
+    if counter > 9:
         draw = True
     else:
         draw = False
     
     return draw    
-        
-def win_check(win, combinations):
-    #Check if Win  
+
+# Win Check       
+def win_check(win, combinations): 
     for combo in combinations:
-        #print(f'combo : {combo}') / This line for debugging
         if combo.count(player) == 3:
             win = True
             break
         else:
             win = False
 
-    return win                 
+    return win 
 
-def lose_check(lose, combinations):
-    #check if Lose    
+# Lose Check
+def lose_check(lose, combinations):  
     for combo in combinations:
         if combo.count(cpu) == 3:
             lose = True
@@ -190,7 +166,6 @@ def lose_check(lose, combinations):
 #End of game
 # Check win, Draw, or Lose Status is True
 def end_status(win,draw,lose):
-    print('end_status')
     print(win,draw,lose)
     if draw == True:
         graphics_mod.tie()
@@ -199,14 +174,15 @@ def end_status(win,draw,lose):
     elif lose == True:
         graphics_mod.loser()
 
-# Asks Player if they want to play again or leave game
-def replay(game_on):
+# Play again?
+def replay():
     user_input = '*'
 
     while user_input != 'Y' and user_input != 'N':
         user_input = input('Do you want to play again? Y or N: ').upper() 
 
         if user_input != 'Y' and user_input != 'N': 
+            clear()
             print('Sorry that is not a valid choice')  
 
         elif user_input == 'Y':
@@ -219,94 +195,108 @@ def replay(game_on):
 ################################################################################
 # Main Game Code
 
-#initial game setup    
-choice_ref = ('1','2','3','4','5','6','7','8','9')
-choice = [' ' for spot in range(0,9)]
-used_choices = []
-player = '*'
-cpu = '*'
+#initial game setup
+positions = {
+    "1" : ' ',
+    "2" : ' ',
+    "3" : ' ',
+    "4" : ' ',
+    "5" : ' ',
+    "6" : ' ',
+    "7" : ' ',
+    "8" : ' ',
+    "9" : ' ',
+    } 
+
+used_positions = []     
 turn= '*'
 progress = True
 game_on = True
 draw = False
 win = False
 lose = False
-combinations = []
+counter = 0
+
 # Run Game
 while game_on:
-    # Clear screen
     clear()
 
     # Game Title Screen
     graphics_mod.game_intro()
 
-    # Player Select X or O
-    player = player_selection(player)
+    # Player selection
+    player, cpu = player_selection()
+    turn = turn_assignment()
 
-    # Assigns CPU opposite of Player's choice
-    cpu = cpu_assignment(cpu)
-
-    #sets who goes first based on Player Selection
-    turn = turn_assignment(turn)
-
-    #while playing game
+    #game play
     while progress == True:
 
         # player Turn
         while turn == True:
             clear()
-            display_grid()
-            combinations = read_combos(combinations)
+            graphics_mod.display_grid(positions)
+            combinations = read_combos()
             win = win_check(win,combinations)
-            draw = draw_check(draw,combinations)
+            draw = draw_check(draw, counter)
             lose = lose_check(lose,combinations)
 
             if win or draw or lose:
                 progress = False
                 break
 
-            # player makes move
-            turn = players_move(turn)
+            counter = turn_counter(counter)
+            turn = players_move(turn, counter)
         
         # cpu turn    
         while turn == False:
             clear()
-            display_grid()
-
-            # check status
-            combinations = read_combos(combinations)
-            win = win_check(win,combinations)
-            draw = draw_check(draw,combinations) 
+            graphics_mod.display_grid(positions)
+            combinations = read_combos()
+            win = win_check(win, combinations)
+            draw = draw_check(draw,counter) 
             lose = lose_check(lose, combinations)
 
             if win or draw or lose:
                 progress = False
                 break
 
-            # cpu makes move
-            turn = cpu_move(turn)
+            counter = turn_counter(counter)
+            turn = cpu_move(turn, counter)
       
     clear()               
     end_status(win,draw,lose)
 
-    #asks if want to play again
-    game_on = replay(game_on)
+    #play again?
+    game_on = replay()
     if game_on == False:
-        # Prints a meassage and leaves game
-        #clear()
+
+        clear()
         print('''Thank you for playing!!!!!!''')        
     else:
+        #reset game
         # Resets initial game setup
+        positions = {
+            "1" : ' ',
+            "2" : ' ',
+            "3" : ' ',
+            "4" : ' ',
+            "5" : ' ',
+            "6" : ' ',
+            "7" : ' ',
+            "8" : ' ',
+            "9" : ' ',
+            }
+
         choice = [' ' for spot in range(0,9)]
-        used_choices.clear()
-        player = '*'
-        cpu = '*'
+        used_positions.clear()
         turn= '*'
         progress = True
         game_on = True
         draw = False
         win = False
         lose = False
+        combinations = []
+        counter = 0
 
 
 

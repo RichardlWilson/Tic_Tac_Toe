@@ -51,3 +51,22 @@ def winner():
  #+#+# #+#+#      #+#     #+#   #+#+# #+#   #+#+# #+#        #+#    #+# 
   ###   ###   ########### ###    #### ###    #### ########## ###    ###
         ''')
+
+# display board
+def display_grid(board):
+    # Variable passed in is a dictionary
+    #clear()
+    print(f'''
+        Tic Tac Toe\n
+             •     •                    
+          {board["7"]}  •  {board["8"]}  •  {board["9"]}
+             •     •  
+        •••••••••••••••••
+             •     •
+          {board["4"]}  •  {board["5"]}  •  {board["6"]} 
+             •     •  
+        •••••••••••••••••
+             •     •
+          {board["1"]}  •  {board["2"]}  •  {board["3"]} 
+             •     •  
+        ''')     
