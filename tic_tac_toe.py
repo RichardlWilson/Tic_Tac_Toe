@@ -133,7 +133,7 @@ def read_combos():
 
 # Draw Check
 def draw_check(draw, counter):
-    if counter > 9:
+    if counter == 9:
         draw = True
     else:
         draw = False
