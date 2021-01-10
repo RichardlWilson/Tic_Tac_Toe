@@ -77,6 +77,66 @@ class Board():
     def __init__(self):
         self.positions = []
         self.used_positions = []
+        
+        self.row1 = [
+                    [0, 1, 2, 2+1],
+                    [1, 2, 0, 0+1], 
+                    [0, 2, 1, 1+1]
+                    ]
+
+        self.row2 = [
+                    [3, 4, 5, 5+1],
+                    [4, 5, 3, 3+1], 
+                    [3, 5, 4, 4+1]
+                    ]
+
+        self.row3 = [
+                    [6, 7, 8, 8+1],
+                    [7, 8, 6, 6+1], 
+                    [6, 8, 7, 7+1]
+                    ]             
+
+        self.col1 = [
+                    [6, 3, 0, 0+1],
+                    [3, 0, 6, 6+1], 
+                    [6, 0, 3, 3+1]
+                    ]
+
+        self.col2 = [
+                    [7, 4, 1, 1+1],
+                    [4, 1, 7, 7+1], 
+                    [7, 1, 4, 4+1]
+                    ]                        
+
+        self.col3 = [
+                    [8, 5, 2, 2+1],
+                    [5, 2, 8, 8+1], 
+                    [8, 2, 5, 5+1]
+                    ]
+
+        self.diag1 = [
+                     [0, 4, 8, 8+1],
+                     [4, 8, 0, 0+1], 
+                     [0, 8, 4, 4+1]
+                     ]
+                    
+
+        self.diag2 = [
+                     [2, 4, 6, 6+1],
+                     [4, 6, 2, 2+1], 
+                     [2, 6, 4, 4+1]
+                     ]
+
+        self.combinations = [
+            self.row1,
+            self.row2,
+            self.row3,
+            self.col1,
+            self.col2,
+            self.col3,
+            self.diag1,
+            self.diag2
+            ]  
 
         self.positions.append( board_position('position1'))
         self.positions.append( board_position('position2'))
@@ -92,9 +152,6 @@ class board_position():
     def __init__(self, name):
         self.name = name
         self.marker = ' '
-
-
-
 
     def __str__(self):
         return self.marker 
@@ -135,223 +192,41 @@ class Player():
             return True
         else:
             return False 
-
+    
     def cpu_stratagy(self):
-
-        # Row 1
-        if game_board.positions[0].marker \
-            == game_board.positions[1].marker == player1.marker \
-            and 3 not in game_board.used_positions:
-
-            if game_board.positions[2].marker == ' ':
-                game_board.positions[2].marker = player2.marker
-                game_board.used_positions.append(3)
-
-        elif game_board.positions[1].marker \
-            == game_board.positions[2].marker == player1.marker \
-            and 1 not in game_board.used_positions:
-
-            if game_board.positions[0].marker == ' ':
-                game_board.positions[0].marker = player2.marker
-                game_board.used_positions.append(1)
-
-        elif game_board.positions[0].marker \
-            == game_board.positions[2].marker == player1.marker \
-            and 2 not in game_board.used_positions:
-
-            if game_board.positions[1].marker == ' ':
-                game_board.positions[1].marker = player2.marker
-                game_board.used_positions.append(2)
-
-        # #.......................................................................
-        # Row 2
-        elif game_board.positions[3].marker \
-            == game_board.positions[4].marker == player1.marker \
-            and 6 not in game_board.used_positions:
-
-            if game_board.positions[5].marker == ' ':
-                game_board.positions[5].marker = player2.marker
-                game_board.used_positions.append(6)
-
-
-        elif game_board.positions[4].marker \
-            == game_board.positions[5].marker == player1.marker \
-            and 4 not in game_board.used_positions:
-
-            if game_board.positions[3].marker == ' ':
-                game_board.positions[3].marker = player2.marker
-                game_board.used_positions.append(4)
-
-        elif game_board.positions[3].marker \
-            == game_board.positions[5].marker == player1.marker \
-            and 5 not in game_board.used_positions:
-
-            if game_board.positions[4].marker == ' ':
-                game_board.positions[4].marker = player2.marker
-                game_board.used_positions.append(5)
-
-        # #.......................................................................
-        # Row 3
-        elif game_board.positions[6].marker \
-            == game_board.positions[7].marker == player1.marker \
-            and 9 not in game_board.used_positions:
-
-            if game_board.positions[8].marker == ' ':
-                game_board.positions[8].marker = player2.marker
-                game_board.used_positions.append(9)
-
-        elif game_board.positions[7].marker \
-            == game_board.positions[8].marker == player1.marker \
-            and 7 not in game_board.used_positions:
-
-            if game_board.positions[6].marker == ' ':
-                game_board.positions[6].marker = player2.marker
-                game_board.used_positions.append(7)
-
-        elif game_board.positions[6].marker \
-            == game_board.positions[8].marker == player1.marker \
-            and 8 not in game_board.used_positions:
-
-            if game_board.positions[7].marker == ' ':
-                game_board.positions[7].marker = player2.marker
-                game_board.used_positions.append(8)
-        # #.......................................................................
-        #Column 1
-        elif game_board.positions[6].marker \
-            == game_board.positions[3].marker == player1.marker \
-            and 1 not in game_board.used_positions:
-
-            if game_board.positions[0].marker == ' ':
-                game_board.positions[0].marker = player2.marker
-                game_board.used_positions.append(1)
-
-        elif game_board.positions[3].marker \
-            == game_board.positions[0].marker == player1.marker \
-            and 7 not in game_board.used_positions:
-
-            if game_board.positions[6].marker == ' ':
-                game_board.positions[6].marker = player2.marker
-                game_board.used_positions.append(7)
-
-        elif game_board.positions[6].marker \
-            == game_board.positions[0].marker == player1.marker \
-            and 4 not in game_board.used_positions:
-
-            if game_board.positions[3].marker == ' ':
-                game_board.positions[3].marker = player2.marker
-                game_board.used_positions.append(4)
-        # #.......................................................................
-        #Column 2
-        elif game_board.positions[7].marker \
-            == game_board.positions[4].marker == player1.marker \
-            and 2 not in game_board.used_positions:
-
-            if game_board.positions[1].marker == ' ':
-                game_board.positions[1].marker = player2.marker
-                game_board.used_positions.append(2)
-
-        elif game_board.positions[4].marker \
-            == game_board.positions[1].marker == player1.marker \
-            and 8 not in game_board.used_positions:
-
-            if game_board.positions[7].marker == ' ':
-                game_board.positions[7].marker = player2.marker
-                game_board.used_positions.append(8)
-
-        elif game_board.positions[7].marker \
-            == game_board.positions[1].marker == player1.marker \
-            and 5 not in game_board.used_positions:
-
-            if game_board.positions[4].marker == ' ':
-                game_board.positions[4].marker = player2.marker
-                game_board.used_positions.append(5)
-
-        # #.......................................................................
-        #Column 3
-        elif game_board.positions[8].marker \
-            == game_board.positions[5].marker == player1.marker \
-            and 3 not in game_board.used_positions:
-
-            if game_board.positions[2].marker == ' ':
-                game_board.positions[2].marker = player2.marker
-                game_board.used_positions.append(3)
-
-        elif game_board.positions[5].marker \
-            == game_board.positions[2].marker == player1.marker \
-            and 9 not in game_board.used_positions:
-
-            if game_board.positions[8].marker == ' ':
-                game_board.positions[8].marker = player2.marker
-                game_board.used_positions.append(9)
-
-        elif game_board.positions[8].marker \
-            == game_board.positions[2].marker == player1.marker \
-            and 6 not in game_board.used_positions:
-
-            if game_board.positions[5].marker == ' ':
-                game_board.positions[5].marker = player2.marker
-                game_board.used_positions.append(6)
-        # #.......................................................................
-        #Diagnal 1
-        elif game_board.positions[0].marker \
-            == game_board.positions[4].marker == player1.marker \
-            and 9 not in game_board.used_positions:
-
-            if game_board.positions[8].marker == ' ':
-                game_board.positions[8].marker = player2.marker
-                game_board.used_positions.append(9)
-
-        elif game_board.positions[4].marker \
-            == game_board.positions[8].marker == player1.marker \
-            and 1 not in game_board.used_positions:
-
-            if game_board.positions[0].marker == ' ':
-                game_board.positions[0].marker = player2.marker
-                game_board.used_positions.append(1)
-
-        elif game_board.positions[0].marker \
-            == game_board.positions[8].marker == player1.marker \
-            and 5 not in game_board.used_positions:
-
-            if game_board.positions[4].marker == ' ':
-                game_board.positions[4].marker = player2.marker
-                game_board.used_positions.append(5)
-        # #.......................................................................
-        #Diagnal 1
-        elif game_board.positions[2].marker \
-            == game_board.positions[4].marker == player1.marker \
-            and 7 not in game_board.used_positions:
-
-            if game_board.positions[6].marker == ' ':
-                game_board.positions[6].marker = player2.marker
-                game_board.used_positions.append(7)
-
-        elif game_board.positions[4].marker \
-            == game_board.positions[6].marker == player1.marker \
-            and 3 not in game_board.used_positions:
-
-            if game_board.positions[2].marker == ' ':
-                game_board.positions[2].marker = player2.marker
-                game_board.used_positions.append(3)
-
-        elif game_board.positions[2].marker \
-            == game_board.positions[6].marker == player1.marker \
-            and 5 not in game_board.used_positions:
-
-            if game_board.positions[4].marker == ' ':
-                game_board.positions[4].marker = player2.marker
-                game_board.used_positions.append(5)
-
-        #Random placement
-        else: 
+        check = False
+        for combo in game_board.combinations:
+            for sequence in combo:
+                check = self.space_check(sequence)
+                if check == True:
+                    #break
+                    return check
+            
+        if check == False:
             rand_num = random.choice(range(0,9))
 
             while rand_num + 1 in game_board.used_positions:
                 rand_num = random.choice(range(0,9))
      
             game_board.positions[rand_num].marker = player2.marker 
-            game_board.used_positions.append(rand_num + 1)
- 
+            game_board.used_positions.append(rand_num + 1)   
+
+    def space_check(self,positions):
+
+        # expected a list 
+        #positions = [ index_a, index_b, index_c, index_c + 1 ] 
+        # Row 1
+        if (positions[2] +1) not in game_board.used_positions \
+            and game_board.positions[positions[0]].marker \
+            == game_board.positions[positions[1]].marker == player1.marker \
+            and game_board.positions[positions[2]].marker == ' ':
+
+            game_board.positions[positions[2]].marker = player2.marker
+            game_board.used_positions.append(positions[2] +1)
+            return True
+        else:
+            return False 
+
     #.......................................................................
          
     def __str__(self):
