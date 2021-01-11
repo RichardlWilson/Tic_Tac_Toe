@@ -10,9 +10,9 @@ def game_intro():
  ##   ##        ##     ##  ##    ##       ##    ##     ## ##    ##       ##    ##     ## ##           ##   ##  
                 ##    ####  ######        ##    ##     ##  ######        ##     #######  ########                     
         \n\033[33m    Welcome to Tic Tac Toe!\n
-        • The object of the game is to get three in a row.
-        • 'X' will always go first.
-        • Select a number on the grid to make your move.\n
+        • The object of the game is to get three in a row.    7 | 8 | 9
+        • 'X' will always go first.                           4 | 5 | 6
+        • Select a number on the grid to make your move.      1 | 2 | 3\n
         \033[39m''')
 
 # Graphic to display if game is a Draw

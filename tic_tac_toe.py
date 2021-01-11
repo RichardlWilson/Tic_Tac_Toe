@@ -10,12 +10,14 @@ import random
 class Game():
     def __init__(self):
         self.on = True
+        self.gameplay_status = True
         self.player_count = 0
         self.turn_counter = 1
 
     def clear_screen(self):
         if name == 'nt':
             _ = system('cls')
+            #ass
         else:
             _ = system('clear')        
 
@@ -61,15 +63,25 @@ class Game():
         user_input = input('Play again? Y or N: ').upper()
 
         while user_input not in valid:
-            print('Im sorry taht is not a valid answer!') 
+            print('Im sorry that is not a valid answer!') 
             user_input = input('Play again? Y or N: ').upper()
 
         if user_input == 'Y':
-            pass
+            return True
         else: 
-            self.on = False
-            self.clear_screen()
-            print('Thank you for playing!!!!!') 
+            return False 
+
+    def replay(self):
+        self.clear_screen()
+        self.on = True
+        self.gameplay_status = True
+        self.player_count = 0
+        self.turn_counter = 1
+        player1.turn = True  
+        game_board.used_positions.clear()
+
+        for index, spaces in enumerate(game_board.positions):
+            game_board.positions[index].marker = ' '       
 
 ################################################################################
 
@@ -78,54 +90,17 @@ class Board():
         self.positions = []
         self.used_positions = []
         
-        self.row1 = [
-                    [0, 1, 2, 2+1],
-                    [1, 2, 0, 0+1], 
-                    [0, 2, 1, 1+1]
-                    ]
+        self.row1 = [[0, 1, 2,], [1, 2, 0,], [0, 2, 1,]]
+        self.row2 = [[3, 4, 5,], [4, 5, 3,], [3, 5, 4,]]
+        self.row3 = [[6, 7, 8,], [7, 8, 6,], [6, 8, 7,]]             
 
-        self.row2 = [
-                    [3, 4, 5, 5+1],
-                    [4, 5, 3, 3+1], 
-                    [3, 5, 4, 4+1]
-                    ]
+        self.col1 = [[6, 3, 0,], [3, 0, 6,], [6, 0, 3,]]
+        self.col2 = [[7, 4, 1,], [4, 1, 7,], [7, 1, 4,]]                        
+        self.col3 = [[8, 5, 2,], [5, 2, 8,], [8, 2, 5,]]
 
-        self.row3 = [
-                    [6, 7, 8, 8+1],
-                    [7, 8, 6, 6+1], 
-                    [6, 8, 7, 7+1]
-                    ]             
+        self.diag1 = [[0, 4, 8,], [4, 8, 0,], [0, 8, 4,]]                    
+        self.diag2 = [[2, 4, 6,], [4, 6, 2,], [2, 6, 4,]]
 
-        self.col1 = [
-                    [6, 3, 0, 0+1],
-                    [3, 0, 6, 6+1], 
-                    [6, 0, 3, 3+1]
-                    ]
-
-        self.col2 = [
-                    [7, 4, 1, 1+1],
-                    [4, 1, 7, 7+1], 
-                    [7, 1, 4, 4+1]
-                    ]                        
-
-        self.col3 = [
-                    [8, 5, 2, 2+1],
-                    [5, 2, 8, 8+1], 
-                    [8, 2, 5, 5+1]
-                    ]
-
-        self.diag1 = [
-                     [0, 4, 8, 8+1],
-                     [4, 8, 0, 0+1], 
-                     [0, 8, 4, 4+1]
-                     ]
-                    
-
-        self.diag2 = [
-                     [2, 4, 6, 6+1],
-                     [4, 6, 2, 2+1], 
-                     [2, 6, 4, 4+1]
-                     ]
 
         self.combinations = [
             self.row1,
@@ -146,7 +121,7 @@ class Board():
         self.positions.append( board_position('position6'))
         self.positions.append( board_position('position7'))
         self.positions.append( board_position('position8'))
-        self.positions.append( board_position('position9'))    
+        self.positions.append( board_position('position9'))      
         
 class board_position():
     def __init__(self, name):
@@ -199,7 +174,6 @@ class Player():
             for sequence in combo:
                 check = self.space_check(sequence)
                 if check == True:
-                    #break
                     return check
             
         if check == False:
@@ -239,55 +213,12 @@ def game_play(player1,player2,game_board):
 
     while game.on == True:
 
-        while player1.turn == True:
+        while game.gameplay_status:
 
-            print(f'{player1.name} / Turn {game.turn_counter}')
-            graphics.display_grid(game_board.positions, Fore)
+            while player1.turn == True:
 
-            user_input = input('Please select a number from 1-9! : ')
-            try:
-                user_input = int(user_input)
-
-            except TypeError():
-                continue    
-
-            if user_input in game_board.used_positions:
-                print('Im sorry that position is already been used.')
-
-            elif user_input not in range(1,10):
-                print('Im sorry your number is out of range.')
-
-            else:
-                game_board.used_positions.append(user_input)
-                game_board.positions[user_input - 1].marker = player1.marker
-                game.turn_counter += 1
-
-                if player1.win_check() == True:
-                    game.clear_screen()
-                    print(f'{player1.name} is the Winner!!!!!')
-                    graphics.winner()
-                    graphics.display_grid(game_board.positions, Fore)
-                    game.on = False
-                    break
-
-                game.clear_screen()
-                player1.turn = False 
-
-#...............................................................................
-
-        while player1.turn == False:
-
-            if player2.name =='Player 2':
-                print(f'{player2.name} / Turn {game.turn_counter}')
+                print(f'{player1.name} / Turn {game.turn_counter}')
                 graphics.display_grid(game_board.positions, Fore)
-
-                if player2.draw() == True:
-                    game.clear_screen()
-                    print('No one wins.')
-                    graphics.draw()
-                    graphics.display_grid(game_board.positions, Fore)
-                    game.on = False
-                    break
 
                 user_input = input('Please select a number from 1-9! : ')
                 try:
@@ -304,7 +235,80 @@ def game_play(player1,player2,game_board):
 
                 else:
                     game_board.used_positions.append(user_input)
-                    game_board.positions[user_input - 1].marker = player2.marker
+                    game_board.positions[user_input - 1].marker = player1.marker
+                    game.turn_counter += 1
+
+                    if player1.win_check() == True:
+                        game.clear_screen()
+                        print(f'{player1.name} is the Winner!!!!!')
+                        graphics.winner()
+                        graphics.display_grid(game_board.positions, Fore)
+                        game.gameplay_status = False
+                        break
+
+                    game.clear_screen()
+                    player1.turn = False 
+
+    #...............................................................................
+
+            while player1.turn == False:
+
+                if player2.name =='Player 2':
+                    print(f'{player2.name} / Turn {game.turn_counter}')
+                    graphics.display_grid(game_board.positions, Fore)
+
+                    if player2.draw() == True:
+                        game.clear_screen()
+                        print('No one wins.')
+                        graphics.draw()
+                        graphics.display_grid(game_board.positions, Fore)
+                        game.gameplay_status = False
+                        break
+
+                    user_input = input('Please select a number from 1-9! : ')
+                    try:
+                        user_input = int(user_input)
+
+                    except TypeError():
+                        continue    
+
+                    if user_input in game_board.used_positions:
+                        print('Im sorry that position is already been used.')
+
+                    elif user_input not in range(1,10):
+                        print('Im sorry your number is out of range.')
+
+                    else:
+                        game_board.used_positions.append(user_input)
+                        game_board.positions[user_input - 1].marker = player2.marker
+                        game.turn_counter += 1
+
+                        if player2.win_check() == True:
+                            game.clear_screen()
+                            print(f'{player2.name} is the Winner!!!!!')
+                            graphics.winner()
+                            graphics.display_grid(game_board.positions, Fore)
+                            game.gameplay_status = False
+                            break
+         
+                        game.clear_screen()
+                        player1.turn = True
+
+    #...............................................................................
+
+                else:
+                    print(f'{player2.name} / Turn {game.turn_counter}')
+                    graphics.display_grid(game_board.positions, Fore)
+
+                    if player2.draw() == True:
+                        game.clear_screen()
+                        print('No one wins.')
+                        graphics.draw()
+                        graphics.display_grid(game_board.positions, Fore)
+                        game.gameplay_status = False
+                        break
+
+                    player2.cpu_stratagy()
                     game.turn_counter += 1
 
                     if player2.win_check() == True:
@@ -312,53 +316,21 @@ def game_play(player1,player2,game_board):
                         print(f'{player2.name} is the Winner!!!!!')
                         graphics.winner()
                         graphics.display_grid(game_board.positions, Fore)
-                        game.on = False
+                        game.gameplay_status = False
                         break
-     
+
                     game.clear_screen()
-                    player1.turn = True
+                    player1.turn = True  
 
-#...............................................................................
+        play = game.play_again()
 
-            else:
-                print(f'{player2.name} / Turn {game.turn_counter}')
-                graphics.display_grid(game_board.positions, Fore)
-
-                if player2.draw() == True:
-                    game.clear_screen()
-                    print('No one wins.')
-                    graphics.draw()
-                    graphics.display_grid(game_board.positions, Fore)
-                    game.on = False
-                    break
-
-                player2.cpu_stratagy()
-                game.turn_counter += 1
-
-                if player2.win_check() == True:
-                    game.clear_screen()
-                    print(f'{player2.name} is the Winner!!!!!')
-                    graphics.winner()
-                    graphics.display_grid(game_board.positions, Fore)
-                    game.on = False
-                    break
-
-                game.clear_screen()
-                player1.turn = True       
- 
-def replay():
-    game.on = True
-    game.player_count = 0
-    game.turn_counter = 1
-
-    game_board.used_positions.clear()
-
-    del game_board
-    game_board = Board()
-
-    player1.turn = True
-    game_play()
-                  
+        if play == True:
+            game.replay()
+        else:
+            game.on = False
+            game.clear_screen()
+            print('Thank you for playing!!!!!')     
+               
 ################################################################################
 
 if __name__ == '__main__':
@@ -379,9 +351,5 @@ if __name__ == '__main__':
 
     game_play(player1,player2,game_board)
 
-    game.play_again()
-
-
-    #restructure game loop for replay
 
 
