@@ -3,6 +3,7 @@ import graphics
 import time
 from colorama import init, Fore
 from os import system, name
+import os
 import random
 
 ################################################################################
@@ -19,7 +20,12 @@ class Game():
             _ = system('cls')
             #ass
         else:
-            _ = system('clear')        
+            _ = system('clear') 
+
+    def screen_size(self):
+        cmd = 'mode 121,25' 
+        os.system(cmd)       
+
 
     def inro(self):
         graphics.game_intro()
@@ -224,7 +230,7 @@ def game_play(player1,player2,game_board):
                 try:
                     user_input = int(user_input)
 
-                except TypeError():
+                except:
                     continue    
 
                 if user_input in game_board.used_positions:
@@ -338,6 +344,7 @@ if __name__ == '__main__':
     init(autoreset = True) #initiates colorama
 
     game = Game()
+    game.screen_size()
     game.clear_screen()
     graphics.game_intro()
 
