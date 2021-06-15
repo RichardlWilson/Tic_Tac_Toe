@@ -1,6 +1,15 @@
 # Tic_Tac_Toe
-This was just a tic tac toe game I made while learning python.
+Tic Tac Toe game I created while learning Python.
 
-The game runs in a terminal window by running the tic_tac_toe.py file.
+Colorful terminal style game.
 
-Prerequisites - need to have python 3.x.x installed. 
+Created using Python 3.x
+
+# Preview
+Title Menu:
+![image](https://user-images.githubusercontent.com/68248054/121975975-7a696900-cd48-11eb-8d2b-a6c484ca18b5.png)
+
+
+Gameplay:
+![image](https://user-images.githubusercontent.com/68248054/121975773-1050c400-cd48-11eb-9813-4a5f81337af4.png)
+
